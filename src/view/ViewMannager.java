@@ -21,7 +21,7 @@ public class ViewMannager {
     private final Scene mainScene;
     private final Stage mainStage;
 
-    private  SpaceSubscene sceneToHide;
+    private SpaceSubscene sceneToHide;
 
     private final static int BUTTON_STARTX = 150;
     private final static int BUTTON_STARTY = 150;
@@ -52,15 +52,15 @@ public class ViewMannager {
 //        mainPane.getChildren().add(subscene);
     }
 
-    private void showSubscene(SpaceSubscene subscene){
-        if(sceneToHide != null){
+    private void showSubscene(SpaceSubscene subscene) {
+        if (sceneToHide != null) {
             sceneToHide.moveSubscene();
         }
         subscene.moveSubscene();
         sceneToHide = subscene;
     }
 
-    private void createSubscene(){
+    private void createSubscene() {
         creditsSubscene = new SpaceSubscene();
         mainPane.getChildren().add(creditsSubscene);
 
@@ -87,19 +87,19 @@ public class ViewMannager {
         shipPickerSubscene.getPane().getChildren().add(createButtonToStart());
     }
 
-    private HBox createShipToChose(){
+    private HBox createShipToChose() {
         HBox box = new HBox();
         box.setSpacing(20);
 
         shipChoserList = new ArrayList<>();
-        for (SHIP ship : SHIP.values()){
+        for (SHIP ship : SHIP.values()) {
             ShipChoser shipToChose = new ShipChoser(ship);
             shipChoserList.add(shipToChose);
             box.getChildren().add(shipToChose);
             shipToChose.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    for (ShipChoser ship:shipChoserList){
+                    for (ShipChoser ship : shipChoserList) {
                         ship.setCircleChoosen(false);
                     }
                     shipToChose.setCircleChoosen(true);
@@ -108,12 +108,12 @@ public class ViewMannager {
             });
 
         }
-        box.setLayoutX((300-(110*2)));
+        box.setLayoutX((300 - (110 * 2)));
         box.setLayoutY(100);
         return box;
     }
 
-    private SpaceButton createButtonToStart(){
+    private SpaceButton createButtonToStart() {
         SpaceButton startButton = new SpaceButton("START");
         startButton.setLayoutX(350);
         startButton.setLayoutY(300);
@@ -121,7 +121,7 @@ public class ViewMannager {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (choosenShip != null){
+                if (choosenShip != null) {
                     GameViewManager gameViewManager = new GameViewManager();
                     gameViewManager.startNewGame(mainStage, choosenShip);
                 }
@@ -144,9 +144,7 @@ public class ViewMannager {
 
     private void createButton() {
         createStartButton();
-        createScoreButton();
         createHelpButton();
-        createCreditsButton();
         createExitButton();
     }
 
@@ -158,18 +156,6 @@ public class ViewMannager {
             @Override
             public void handle(ActionEvent event) {
                 showSubscene(shipPickerSubscene);
-            }
-        });
-    }
-
-    private void createScoreButton() {
-        SpaceButton scoreButton = new SpaceButton("SCORE");
-        addButton(scoreButton);
-
-        scoreButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                showSubscene(scoreSubscene);
             }
         });
     }
@@ -186,17 +172,6 @@ public class ViewMannager {
         });
     }
 
-    private void createCreditsButton() {
-        SpaceButton creditsButton = new SpaceButton("CREDITS");
-        addButton(creditsButton);
-
-        creditsButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                showSubscene(creditsSubscene);
-            }
-        });
-    }
 
     private void createExitButton() {
         SpaceButton exitButton = new SpaceButton("EXIT");
