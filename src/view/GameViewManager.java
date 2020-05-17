@@ -143,13 +143,13 @@ public class GameViewManager {
         star.setLayoutY(star.getLayoutY() + 3);
 
         for (int i = 0; i < brownMeteors.length; i++) {
-            brownMeteors[i].setLayoutY(brownMeteors[i].getLayoutY()+5);
-            brownMeteors[i].setRotate(brownMeteors[i].getRotate()+4);
+            brownMeteors[i].setLayoutY(brownMeteors[i].getLayoutY() + 5);
+            brownMeteors[i].setRotate(brownMeteors[i].getRotate() + 4);
         }
 
         for (int i = 0; i < greyMeteors.length; i++) {
-            greyMeteors[i].setLayoutY(greyMeteors[i].getLayoutY()+5);
-            greyMeteors[i].setRotate(greyMeteors[i].getRotate()+4);
+            greyMeteors[i].setLayoutY(greyMeteors[i].getLayoutY() + 5);
+            greyMeteors[i].setRotate(greyMeteors[i].getRotate() + 4);
         }
     }
 
@@ -180,8 +180,8 @@ public class GameViewManager {
     private void createShip(SHIP choosenShip) {
 
         ship = new ImageView(choosenShip.getUrlShip());
-        ship.setLayoutX((GAME_WIDTH)/2);
-        ship.setLayoutY((GAME_HEIGHT)-90 );
+        ship.setLayoutX((GAME_WIDTH) / 2);
+        ship.setLayoutY((GAME_HEIGHT) - 90);
         gamePane.getChildren().add(ship);
     }
 
@@ -269,8 +269,8 @@ public class GameViewManager {
     }
 
     private void checkIfElementsMeetsTogether() {
-        if (SHIP_RADIUS + STAR_RADIUS > distanceCalculator(ship.getLayoutX() + 40, star.getLayoutX() + 15, ship.getLayoutY()
-                + 37, star.getLayoutY() + 15)) {
+        if (SHIP_RADIUS + STAR_RADIUS > distanceCalculator(ship.getLayoutX() + 40, star.getLayoutX() + 15,
+                ship.getLayoutY() + 37, star.getLayoutY() + 15)) {
             setElementsPossition(star);
 
             points++;
@@ -300,10 +300,11 @@ public class GameViewManager {
     }
 
     private void loseLife() {
-        gamePane.getChildren().remove(playerLife);
+        gamePane.getChildren().remove(playerLifes[playerLife]);
         playerLife--;
         if (playerLife < 0) {
             gameStage.close();
+            animationTimer.stop();
             menuStage.show();
         }
         createShip(choosenShip);
