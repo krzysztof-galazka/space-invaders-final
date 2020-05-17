@@ -1,6 +1,5 @@
 package view;
 
-import javafx.animation.Animation;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,7 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import model.SHIP;
 import model.SmallLabel;
-import org.omg.CORBA.PRIVATE_MEMBER;
 
 import java.util.Random;
 
@@ -24,8 +22,8 @@ public class GameViewManager {
     private Scene gameScene;
     private Stage gameStage;
 
-    private static final int GAMGE_HEIGHT = 720;
-    private static final int GAMGE_WIDTH = 1024;
+    private static final int GAME_HEIGHT = 720;
+    private static final int GAME_WIDTH = 1024;
 
     private Stage menuStage;
     private ImageView ship;
@@ -56,6 +54,7 @@ public class GameViewManager {
     private final static int STAR_RADIUS = 10;
     private final static int SHIP_RADIUS = 25;
     private final static int METEOR_RADIUS = 18;
+    private SHIP choosenShip;
 
     public GameViewManager() {
         initializeStage();
@@ -91,12 +90,13 @@ public class GameViewManager {
 
     public void initializeStage() {
         gamePane = new AnchorPane();
-        gameScene = new Scene(gamePane, GAMGE_HEIGHT, GAMGE_WIDTH);
+        gameScene = new Scene(gamePane, GAME_HEIGHT, GAME_WIDTH);
         gameStage = new Stage();
         gameStage.setScene(gameScene);
     }
 
     public void startNewGame(Stage menuStage, SHIP choosenShip) {
+        this.choosenShip = choosenShip;
         this.menuStage = menuStage;
         this.menuStage.hide();
         createBackground();
@@ -113,10 +113,11 @@ public class GameViewManager {
         setElementsPossition(star);
         gamePane.getChildren().add(star);
         pointsLabel = new SmallLabel("Points: 00");
-        pointsLabel.setLayoutX(460);
+        pointsLabel.setLayoutX(450);
         pointsLabel.setLayoutY(20);
         gamePane.getChildren().add(pointsLabel);
         playerLifes = new ImageView[3];
+
 
         for (int i = 0; i < playerLifes.length; i++) {
             playerLifes[i] = new ImageView(choosenShip.getUrlLife());
@@ -139,15 +140,15 @@ public class GameViewManager {
     }
 
     private void moveElements() {
-        star.setLayoutY(star.getLayoutY() + 5);
+        star.setLayoutY(star.getLayoutY() + 3);
 
         for (int i = 0; i < brownMeteors.length; i++) {
-            brownMeteors[i].setLayoutY(brownMeteors[i].getLayoutY()+7);
+            brownMeteors[i].setLayoutY(brownMeteors[i].getLayoutY()+5);
             brownMeteors[i].setRotate(brownMeteors[i].getRotate()+4);
         }
 
         for (int i = 0; i < greyMeteors.length; i++) {
-            greyMeteors[i].setLayoutY(greyMeteors[i].getLayoutY()+7);
+            greyMeteors[i].setLayoutY(greyMeteors[i].getLayoutY()+5);
             greyMeteors[i].setRotate(greyMeteors[i].getRotate()+4);
         }
     }
@@ -171,15 +172,16 @@ public class GameViewManager {
     }
 
     private void setElementsPossition(ImageView image) {
-        image.setLayoutX(random.nextInt(370));
-        image.setLayoutY(random.nextInt(3200) + 600);
+        image.setLayoutX(random.nextInt(GAME_WIDTH));
+        image.setLayoutY(random.nextInt(GAME_HEIGHT));
     }
+
 
     private void createShip(SHIP choosenShip) {
 
         ship = new ImageView(choosenShip.getUrlShip());
-        ship.setLayoutX((GAMGE_WIDTH)/2);
-        ship.setLayoutY((GAMGE_HEIGHT)-90 );
+        ship.setLayoutX((GAME_WIDTH)/2);
+        ship.setLayoutY((GAME_HEIGHT)-90 );
         gamePane.getChildren().add(ship);
     }
 
@@ -187,10 +189,11 @@ public class GameViewManager {
         animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                // moveBackground();
+                //moveBackground();
                 moveElements();
                 checkIfElementsAreBehindShip();
                 moveShip();
+                checkIfElementsMeetsTogether();
             }
         };
         animationTimer.start();
@@ -288,7 +291,7 @@ public class GameViewManager {
 
         for (int i = 0; i < greyMeteors.length; i++) {
             if (METEOR_RADIUS + SHIP_RADIUS > distanceCalculator(ship.getLayoutX() + 40,
-                    greyMeteors[i].getLayoutX() + 20, ship.getLayoutY() + 37, greyMeteors[i].getLayoutY() + 20)) {
+                    greyMeteors[i].getLayoutX(), ship.getLayoutY(), greyMeteors[i].getLayoutY())) {
                 loseLife();
                 setElementsPossition(greyMeteors[i]);
 
@@ -303,6 +306,7 @@ public class GameViewManager {
             gameStage.close();
             menuStage.show();
         }
+        createShip(choosenShip);
     }
 
     private double distanceCalculator(double x1, double x2, double y1, double y2) {
